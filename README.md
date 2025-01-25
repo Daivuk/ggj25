@@ -13,4 +13,9 @@ On Mac you need git, a compiler, CMake and possibly other dependencies (OpenGL, 
 On Linux is should work just as on Mac, but hasn't been tested in a long time.
 
 ## Credits
+### Team
 - David (Daivuk) St-Louis
+### Resources
+- Bubble Pops by Abacagi -- https://freesound.org/s/497198/ -- License: Attribution 4.0
+- SeqGoodVibes2 by Xcreenplay -- https://freesound.org/s/725912/ -- License: Attribution NonCommercial 4.0
+- Success Resolution Video Game Fanfare Sound Effect.mp3 by FunWithSound -- https://freesound.org/s/456968/ -- License: Attribution 4.0
