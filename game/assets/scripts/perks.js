@@ -1,0 +1,201 @@
+var RARITY_COMMON = 0;
+var RARITY_UNCOMMON = 1;
+var RARITY_RARE = 2;
+
+var RARITY_COLORS = [
+    Color.fromHexRGB(0xd6f4e9).mul(new Color(0.5, 0.5, 0.5, 1)),
+    Color.fromHexRGB(0x45e98d),
+    Color.fromHexRGB(0xe43113)
+];
+
+var RARITY_TEXTS = [
+    "Common",
+    "Uncommon",
+    "Rare"
+];
+
+var COL_POSITIVE = "^285"
+var perks_texture = getTexture("perks.png");
+
+function init_perks()
+{
+}
+
+function get_perk_uvs(index)
+{
+    var row = Math.floor(index / 8);
+    var col = index % 8;
+    return new Vector4(
+        col / 8,
+        row / 8,
+        (col + 1) / 8,
+        (row + 1) / 8
+    );
+}
+
+var PERKS = [
+    //--- COMMON
+    {
+        name: "Tip",
+        description: "Add " + COL_POSITIVE + "2^999 points per scoring",
+        rarity: RARITY_COMMON,
+        icon_uvs: get_perk_uvs(1),
+        on_score: function(score)
+        {
+            return score + 1
+        }
+    },
+    {
+        name: "Pointy",
+        description: "Add " + COL_POSITIVE + "2^999 damage to needle",
+        rarity: RARITY_COMMON,
+        icon_uvs: get_perk_uvs(0),
+        on_poke: function(damage)
+        {
+            return damage + 2
+        }
+    },
+
+    //--- UNCOMMON
+    {
+        name: "Long Arm",
+        description: "Increase neighbor bursts by " + COL_POSITIVE + "25%",
+        rarity: RARITY_UNCOMMON,
+        icon_uvs: get_perk_uvs(2),
+        get_burst_dist: function(distance)
+        {
+            return distance * 1.25;
+        }
+    },
+
+    //--- RARE
+    {
+        name: "Proximity",
+        description: "Bubbles spawn close to other bubbles",
+        rarity: RARITY_RARE,
+        icon_uvs: get_perk_uvs(3),
+        get_spawn_range: function(range)
+        {
+            return 150;
+        }
+    },
+
+    //--- UPGRADES
+    {
+        name: "Needle",
+        upgrade: true,
+        icon_uvs: get_perk_uvs(4),
+        levels: [
+            {
+                on_poke: function(damage, bubble)
+                {
+                    if (bubble.is_steel) return 0;
+                    return damage
+                }
+            },
+            {
+                description: "Needle does " + COL_POSITIVE + "50%^999 more damage",
+                on_poke: function(damage, bubble)
+                {
+                    if (bubble.is_steel) return 0;
+                    return damage * 1.5
+                }
+            },
+            {
+                description: "Needle does " + COL_POSITIVE + "50%^999 more damage",
+                on_poke: function(damage, bubble)
+                {
+                    if (bubble.is_steel) return 0;
+                    return damage * 1.5
+                }
+            },
+            {
+                description: "Needle can pierce steel bubbles",
+                on_poke: function(damage, bubble)
+                {
+                    return damage * 1.5
+                }
+            }
+        ]
+    }
+]
+
+function get_perk(name)
+{
+    for (var i = 0; i < PERKS.length; ++i)
+    {
+        var perk = PERKS[i];
+        if (perk.name == name) return perk;
+    }
+    return null;
+}
+
+function invoke_perks(fnName, param, arg1)
+{
+    // Perks
+    for (var i = 0; i < perk_slots.length; ++i)
+    {
+        var img_perk = perk_slots[i];
+        var perk = img_perk.perk;
+        if (perk && perk.hasOwnProperty(fnName))
+        {
+            param = perk[fnName](param, arg1);
+        }
+    }
+
+    // Passives (Bad name, they are all passives)
+    for (var i = 0; i < upgrades.passives.length; ++i)
+    {
+        var passive = upgrades.passives[i];
+        var perk = passive.perk.levels[passive.level];
+        if (perk.hasOwnProperty(fnName))
+        {
+            param = perk[fnName](param, arg1);
+        }
+    }
+
+    return param;
+}
+
+function chose_story_perk(ui)
+{
+    if (wave.state != "show score") return;
+
+    if (ui.perk.upgrade)
+    {
+        var passive = get_passive(ui.perk.name);
+        if (passive)
+        {
+            passive.level++;
+            wave.state = "hide score"
+            wave.state_time = 0;
+            playSound("buy.wav");
+            return;
+        }
+
+        // Shouldn't happen
+        playSound("bad_score.wav");
+        return;
+    }
+    else
+    {
+        for (var i = 0; i < perk_slots.length; ++i)
+        {
+            var perk_slot = perk_slots[i];
+            if (!perk_slot.perk)
+            {
+                perk_slot.perk = ui.perk;
+                perk_slot.image_uvs = perk_slot.perk.icon_uvs;
+                perk_slot.image = perks_texture;
+                wave.state = "hide score"
+                wave.state_time = 0;
+                playSound("buy.wav");
+                return;
+            }
+        }
+
+        // Error! No more room
+        playSound("bad_score.wav");
+        return;
+    }
+}

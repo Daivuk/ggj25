@@ -1,6 +1,30 @@
 var wave = create_wave();
 var hurry_sound = createSoundInstance("hurry.wav")
 
+var WAVES = [
+    {
+        score_goal: 100,
+        spawn_rate: 1,
+        normal_bubbles_chances: 1,
+        green_bubbles_chances: 0,
+        steel_bubbles_chances: 0
+    },
+    {
+        score_goal: 250,
+        spawn_rate: 1.2,
+        normal_bubbles_chances: 1,
+        green_bubbles_chances: 0,
+        steel_bubbles_chances: 0
+    },
+    {
+        score_goal: 500,
+        spawn_rate: 1.5,
+        normal_bubbles_chances: 5,
+        green_bubbles_chances: 1,
+        steel_bubbles_chances: 0
+    }
+]
+
 function create_wave()
 {
     return {
@@ -11,7 +35,10 @@ function create_wave()
         score_goal: 100,
         state: "idle",
         triggered_complete_sound: false,
-        state_time: 0
+        state_time: 0,
+        normal_bubbles_chances: 1,
+        green_bubbles_chances: 0,
+        steel_bubbles_chances: 0
     };
 }
 
@@ -26,14 +53,32 @@ function start_wave()
     hurry_sound.play();
     hurry_sound.setVolume(0);
 
+    var wave_data = WAVES[wave.number];
+
     wave.number++;
     wave.state = "in wave"
     wave.state_time = 0;
-    wave.countdown = 10;
-    wave.spawn_rate = wave.number;
+    wave.countdown = 6;
     wave.spawn_delay = 1;
-    wave.score_goal = 100 + 60 * Math.ceil(Math.pow(wave.number, 2));
     wave.triggered_complete_sound = false;
+
+    for (var key in wave_data)
+    {
+        wave[key] = wave_data[key];
+    }
+}
+
+function get_random_bubble_type()
+{
+    var total_chances =
+        wave.normal_bubbles_chances + 
+        wave.green_bubbles_chances + 
+        wave.steel_bubbles_chances;
+    
+    var rnd = Random.getNext(total_chances);
+    if (rnd < wave.normal_bubbles_chances) return "normal";
+    if (rnd < wave.green_bubbles_chances) return "green";
+    return "steel";
 }
 
 function end_wave()

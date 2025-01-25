@@ -12,7 +12,7 @@ function add_burst(pos, radius)
         pos: pos,
         radius: radius,
         t: 0,
-        angle: Random.randNumber(360)
+        angle: Random.getNext(360)
     };
     bursts.push(burst);
 }

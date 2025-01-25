@@ -24,7 +24,7 @@ function get_bubble_at(pos)
 
 function create_bubble(pos)
 {
-    return {
+    var bubble = {
         pos: pos,
         radius: 5,
         stress: 0,
@@ -34,8 +34,24 @@ function create_bubble(pos)
         shaking_t: 0,
         burst_timer: 0,
         score: 0,
-        type: "normal"
+        color: Color.WHITE
     };
+    var type = get_random_bubble_type();
+    switch (type)
+    {
+        case "green":
+        {
+            bubble.color = Color.fromHexRGB(0x23d25b);
+            bubble.life = 3;
+            break;
+        }
+        case "steel":
+        {
+            bubble.is_steel = true;
+            break;
+        }
+    }
+    return bubble;
 }
 
 function get_bubble_t(bubble)
@@ -245,13 +261,13 @@ function render_bubble(bubble)
 
         var cos_theta = Math.cos(angle);
         var sin_theta = Math.sin(angle);
-        PrimitiveBatch.draw(pos.add(new Vector2(cos_theta * radius, sin_theta * radius)), Color.WHITE, edge_uvs);
+        PrimitiveBatch.draw(pos.add(new Vector2(cos_theta * radius, sin_theta * radius)), bubble.color, edge_uvs);
 
         cos_theta = Math.cos(next_angle);
         sin_theta = Math.sin(next_angle);
-        PrimitiveBatch.draw(pos.add(new Vector2(cos_theta * radius, sin_theta * radius)), Color.WHITE, edge_uvs);
+        PrimitiveBatch.draw(pos.add(new Vector2(cos_theta * radius, sin_theta * radius)), bubble.color, edge_uvs);
 
-        PrimitiveBatch.draw(pos, Color.WHITE, center_uvs);
+        PrimitiveBatch.draw(pos, bubble.color, center_uvs);
     }
 }
 
