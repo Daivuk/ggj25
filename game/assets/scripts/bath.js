@@ -19,7 +19,6 @@ function render_bath()
     water_shader.setNumber("anim", bath_anim);
 
     SpriteBatch.begin(screen_transform, water_shader);
-    SpriteBatch.drawSprite(water_texture, Vector2.ZERO, Color.fromHexRGB(0x229bb9), 0, 1, Vector2.TOP_LEFT);
-    // SpriteBatch.drawRect(null, new Rect(0, 0, BATH_SIZE), Color.fromHexRGB(0x229bb9)/*.mul(new Color(0.65))*/);
+    SpriteBatch.drawRect(water_texture, new Rect(0, 0, BATH_SIZE.x, BATH_SIZE.y), Color.fromHexRGB(0x229bb9));
     SpriteBatch.end();
 }

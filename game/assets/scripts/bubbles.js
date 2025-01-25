@@ -33,7 +33,8 @@ function create_bubble(pos)
         shaking: false,
         shaking_t: 0,
         burst_timer: 0,
-        score: 0
+        score: 0,
+        type: "normal"
     };
 }
 
@@ -54,13 +55,30 @@ function calc_bubble_score(bubble)
     return BUBBLE_SCORE_TABLE[idx];
 }
 
+function has_bubble_in_range(pos, range)
+{
+    range *= range;
+    for (var i = 0; i < bubbles.length; ++i)
+    {
+        var bubble = bubbles[i];
+        var dist = Vector2.distanceSquared(bubble.pos, pos);
+        if (dist <= range)
+            return true;
+    }
+    return false;
+}
+
 function spawn_bubble()
 {
+    var spawn_distance = BATH_SIZE.length();
+    spawn_distance = invoke_perks("get_spawn_range", spawn_distance);
+
     // Find a free spot
     for (var i = 0; i < 100; ++i)
     {
         var pos = Random.randVector2(BATH_SIZE);
         if (get_bubble_at(pos)) continue;
+        if (bubbles.length > 0 && !has_bubble_in_range(pos, spawn_distance)) continue;
         var bubble = create_bubble(pos);
         bubbles.push(bubble);
         return bubble;
@@ -135,13 +153,30 @@ function update_bubble(bubble, dt)
 
 function udpate_bubbles(dt)
 {
-    for (var i = 0; i < bubbles.length; ++i)
+    if (wave.state == "show score")
     {
-        var bubble = bubbles[i];
-        if (!update_bubble(bubble, dt))
+        for (var i = 0; i < bubbles.length; ++i)
         {
-            --i;
-            continue;
+            var bubble = bubbles[i];
+            bubble.radius -= dt * 50;
+            if (bubble.radius <= 0)
+            {
+                bubbles.splice(i, 1);
+                --i;
+                continue;
+            }
+        }
+    }
+    else
+    {
+        for (var i = 0; i < bubbles.length; ++i)
+        {
+            var bubble = bubbles[i];
+            if (!update_bubble(bubble, dt))
+            {
+                --i;
+                continue;
+            }
         }
     }
 }
@@ -150,17 +185,18 @@ function burst_bubble(bubble)
 {
     bubbles.splice(bubbles.indexOf(bubble), 1);
     add_burst(bubble.pos, bubble.radius);
-    score += bubble.score;
+    var scoring = invoke_perks("on_score", bubble.score);
+    score += scoring;
 
-    if (bubble.score > 0)
+    if (scoring > 0)
     {
-        if (bubble.score >= 10)
-            add_flare(bubble.pos, "+" + bubble.score, Color.fromHexRGB(0x23d245), FLARE_STYLE_AMAZING);
+        if (scoring >= 10)
+            add_flare(bubble.pos, "+" + scoring, Color.fromHexRGB(0x23d245), FLARE_STYLE_AMAZING);
         else
-            add_flare(bubble.pos, "+" + bubble.score, Color.fromHexRGB(0x23d245), FLARE_STYLE_GOOD);
+            add_flare(bubble.pos, "+" + scoring, Color.fromHexRGB(0x23d245), FLARE_STYLE_GOOD);
     }
-    else if (bubble.score < 0)
-        add_flare(bubble.pos, "" + bubble.score, Color.fromHexRGB(0xe43113), FLARE_STYLE_BAD);
+    else if (scoring < 0)
+        add_flare(bubble.pos, "" + scoring, Color.fromHexRGB(0xe43113), FLARE_STYLE_BAD);
 
     playSoundCue("pop.cue", 1);
 
@@ -170,8 +206,8 @@ function burst_bubble(bubble)
         var other_bubble = bubbles[i];
         if (other_bubble.burst_timer == 0)
         {
-            var dist = bubble.radius + other_bubble.radius;
-            if (Vector2.distance(bubble.pos, other_bubble.pos) < dist + 5)
+            var burst_dist = invoke_perks("get_burst_dist", bubble.radius + other_bubble.radius);
+            if (Vector2.distance(bubble.pos, other_bubble.pos) < burst_dist + 5)
             {
                 other_bubble.burst_timer = Random.randNumber(.09, .11);
                 other_bubble.score = Math.ceil(get_bubble_t(other_bubble) * bubble.score * 2);
@@ -182,7 +218,7 @@ function burst_bubble(bubble)
 
 function poke_bubble(bubble)
 {
-    bubble.life--;
+    bubble.life = Math.max(0, bubble.life - invoke_perks("on_poke", 1, bubble));
     if (bubble.life <= 0)
     {
         bubble.score = calc_bubble_score(bubble);

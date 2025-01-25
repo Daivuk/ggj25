@@ -21,3 +21,4 @@ On Linux is should work just as on Mac, but hasn't been tested in a long time.
 - Success Resolution Video Game Fanfare Sound Effect.mp3 by FunWithSound -- https://freesound.org/s/456968/ -- License: Attribution 4.0
 - success_02.wav by Kenneth_Cooney -- https://freesound.org/s/463067/ -- License: Creative Commons 0
 - Error Bleep 4 by original_sound -- https://freesound.org/s/372197/ -- License: Attribution 3.0
+- old cash register open and close with a bing by clubmydia+ -- https://freesound.org/s/584168/ -- License: Creative Commons 0
