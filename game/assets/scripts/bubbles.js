@@ -94,7 +94,7 @@ function update_bubble(bubble, dt)
         bubble.shaking_t += dt;
         if (bubble.shaking_t > 0.5)
         {
-            bubble.score = -10;
+            bubble.score = 0;//-10;
             burst_bubble(bubble);
             return false;
         }

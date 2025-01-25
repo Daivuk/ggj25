@@ -56,9 +56,7 @@ function render()
 
     update_camera();
 
-    SpriteBatch.begin(screen_transform);
     render_bath();
-    SpriteBatch.end();
 
     PrimitiveBatch.begin(PrimitiveMode.TRIANGLE_LIST, getTexture("bubble.png"), screen_transform);
     render_bubbles()

@@ -1,0 +1,43 @@
+// Shader input. These should match outputs from the vertex shader.
+// Order is also important
+input float2 inUV;
+input float4 inColor;
+
+// Textures and their's sampler state
+Texture0 texture0
+{
+    filter = trilinear;
+    repeat = wrap;
+}
+
+extern float anim;
+
+void main()
+{
+    float strength = texture0(inUV + float2(anim * 0.01, anim * 0.03)).a;
+
+    const float scale = lerp(1, 10, strength);
+
+    float2 scaledUV = inUV * scale;
+    float time = anim * strength;
+
+    // Create wavy motion using sine waves
+    // float wave1 = sin(scaledUV.x * 10.0 + time * 0.5);
+    // float wave2 = cos(scaledUV.y * 12.0 - time * 0.4);
+    // float wave3 = sin((scaledUV.x + scaledUV.y) * 8.0 + time * 0.6);
+    float wave1 = sin(scaledUV.x * 6.0 + time * 0.3);
+    float wave2 = cos(scaledUV.y * 7.0 - time * 0.2);
+    float wave3 = sin((scaledUV.x + scaledUV.y) * 4.0 + time * 0.4);
+    float wave4 = sin(scaledUV.x * 10.0 + scaledUV.y * 5.0 + time * 0.1);
+
+    // Combine the waves to get the displacement
+    // float displacement = (wave1 + wave2 + wave3) * 0.1;
+    float displacement = (wave1 * 0.3 + wave2 * 0.2 + wave3 * 0.4 + wave4 * 0.1) * 0.15;
+
+    // Offset UVs by the displacement
+    inUV = inUV + float2(displacement, displacement);
+    float4 diffuse = texture0(inUV);
+    oColor = lerp(diffuse * inColor, inColor, 0.7);
+
+    // oColor = lerp(inColor * 0.5, inColor * 1.5, displacement);
+}
