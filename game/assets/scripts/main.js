@@ -20,59 +20,103 @@ init_flares();
 init_perks();
 init_store();
 
-// Left HUD UI
-var lbl_wave = parent_ui(ui_root, create_ui("label", new Vector2(-150, 16), "Wave 0"));
-var lbl_countdown = parent_ui(ui_root, create_ui("label", new Vector2(-150, 46), "Countdown 0"));
-var lbl_score = parent_ui(ui_root, create_ui("label", new Vector2(-150, 76), "Score 0"));
-var lbl_goal = parent_ui(ui_root, create_ui("label", new Vector2(-150, 106), "Goal 0"));
+var game_state = "main_menu";
+create_main_menu_uis();
 
-// Perks
-var perk_slots = [
-    parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x + 50, 16))),
-    parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x + 50, 16 + 96))),
-    parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x + 50, 16 + 96 * 2))),
-    parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x + 50, 16 + 96 * 3))),
-]
-
-for (var i = 0; i < perk_slots.length; ++i)
+function create_main_menu_uis()
 {
-    var perk_slot = perk_slots[i];
-    perk_slot.rect.w = 76;
-    perk_slot.rect.h = 76;
-    perk_slot.bg_image = getTexture("ui_slot_bg.png");
-    perk_slot.perk = null;
-    perk_slot.tooltip = render_perk_toolkit;
-}
-
-//--- Store UI
-var store_slots = [];
-{
-    // Frame
-    var frm_store = parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x * 0.5 - 200, BATH_SIZE.y * 2)));
-    frm_store.rect.w = 400
-    frm_store.rect.h = 600
-    frm_store.color = Color.fromHexRGB(0xf6e9c7);
+    var frm_menu = parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x * 0.5 - 200, BATH_SIZE.y * 0.5 - 150)));
+    frm_menu.rect.w = 400
+    frm_menu.rect.h = 300
+    frm_menu.color = Color.fromHexRGB(0xf6e9c7);
 
     // Title
-    var lbl_title = parent_ui(frm_store, create_ui("label", new Vector2(200, 20), "Upgrades"));
-    lbl_title.outline = true;
+    parent_ui(frm_menu, create_ui("label", new Vector2(200, 32), "Main Menu")).outline = true
 
-    for (var i = 0; i < 3; ++i)
+    var play_button = parent_ui(frm_menu, create_ui("button", new Vector2(100, 120), "Play"))
+    play_button.color = Color.fromHexRGB(0x012f3b)
+    play_button.rect.w = 200;
+    play_button.rect.h = 32;
+    play_button.on_click = function(ui)
     {
-        var perk_slot = parent_ui(frm_store, create_ui("button", new Vector2(200 - 32, 150 + i * 150)));
+        game_state = "game"
+        init_uis();
+        create_game_uis();
+        start_wave();
+    }
+
+    var quit_btn = parent_ui(frm_menu, create_ui("button", new Vector2(100, 180), "Quit"))
+    quit_btn.color = Color.fromHexRGB(0x012f3b)
+    quit_btn.rect.w = 200;
+    quit_btn.rect.h = 32;
+    quit_btn.on_click = function(ui)
+    {
+        quit();
+    }
+}
+
+var lbl_wave;
+var lbl_countdown;
+var lbl_score;
+var lbl_goal;
+var store_slots = [];
+var perk_slots = [];
+var frm_store;
+
+function create_game_uis()
+{
+    // Left HUD UI
+    lbl_wave = parent_ui(ui_root, create_ui("label", new Vector2(-150, 16), "Wave 0"));
+    lbl_countdown = parent_ui(ui_root, create_ui("label", new Vector2(-150, 46), "Countdown 0"));
+    lbl_score = parent_ui(ui_root, create_ui("label", new Vector2(-150, 76), "Score 0"));
+    lbl_goal = parent_ui(ui_root, create_ui("label", new Vector2(-150, 106), "Goal 0"));
+
+    // Perks
+    perk_slots = [
+        parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x + 50, 16))),
+        parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x + 50, 16 + 96))),
+        parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x + 50, 16 + 96 * 2))),
+        parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x + 50, 16 + 96 * 3))),
+    ]
+
+    for (var i = 0; i < perk_slots.length; ++i)
+    {
+        var perk_slot = perk_slots[i];
         perk_slot.rect.w = 76;
         perk_slot.rect.h = 76;
         perk_slot.bg_image = getTexture("ui_slot_bg.png");
         perk_slot.perk = null;
         perk_slot.tooltip = render_perk_toolkit;
-        perk_slot.on_click = chose_story_perk;
-        store_slots.push(perk_slot);
+    }
 
-        parent_ui(perk_slot, create_ui("label", new Vector2(perk_slot.rect.w * 0.5, -24), "^001PerkName"));
+    //--- Store UI
+    store_slots = [];
+    {
+        // Frame
+        frm_store = parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x * 0.5 - 200, BATH_SIZE.y * 2)));
+        frm_store.rect.w = 400
+        frm_store.rect.h = 600
+        frm_store.color = Color.fromHexRGB(0xf6e9c7);
+
+        // Title
+        var lbl_title = parent_ui(frm_store, create_ui("label", new Vector2(200, 32), "Upgrades"));
+        lbl_title.outline = true;
+
+        for (var i = 0; i < 3; ++i)
+        {
+            var perk_slot = parent_ui(frm_store, create_ui("button", new Vector2(200 - 32, 150 + i * 150)));
+            perk_slot.rect.w = 76;
+            perk_slot.rect.h = 76;
+            perk_slot.bg_image = getTexture("ui_slot_bg.png");
+            perk_slot.perk = null;
+            perk_slot.tooltip = render_perk_toolkit;
+            perk_slot.on_click = chose_story_perk;
+            store_slots.push(perk_slot);
+
+            parent_ui(perk_slot, create_ui("label", new Vector2(perk_slot.rect.w * 0.5, -24), "^001PerkName"));
+        }
     }
 }
-
-start_wave();
 
 function update_camera()
 {
@@ -90,29 +134,35 @@ function update(dt)
 {
     update_camera();
     update_uis(dt);
-    update_waves(dt)
+    if (game_state == "game")
+    {
+        update_waves(dt)
+    }
     update_bath(dt);
     udpate_bubbles(dt)
     update_bursts(dt)
     update_flares(dt);
 
     // Pop bubble
-    if (wave.state == "in wave")
+    if (game_state == "game")
     {
-        if (Input.isJustDown(Key.MOUSE_1))
+        if (wave.state == "in wave")
         {
-            var bubble = get_bubble_at(mouse_pos);
-            if (bubble)
+            if (Input.isJustDown(Key.MOUSE_1))
             {
-                poke_bubble(bubble);
+                var bubble = get_bubble_at(mouse_pos);
+                if (bubble)
+                {
+                    poke_bubble(bubble);
+                }
             }
         }
-    }
 
-    lbl_wave.text = "Wave ^986" + wave.number;
-    lbl_countdown.text = "Countdown ^986" + Math.ceil(wave.countdown);
-    lbl_score.text = "Score ^986" + score;
-    lbl_goal.text = "Goal ^986" + wave.score_goal;
+        lbl_wave.text = "Wave ^986" + wave.number;
+        lbl_countdown.text = "Countdown ^986" + Math.ceil(wave.countdown);
+        lbl_score.text = "Score ^986" + score;
+        lbl_goal.text = "Goal ^986" + wave.score_goal;
+    }
 }
 
 function render()
