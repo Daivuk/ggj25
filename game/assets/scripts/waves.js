@@ -9,7 +9,8 @@ function create_wave()
         spawn_rate: 1,
         spawn_delay: 1,
         score_goal: 100,
-        state: "idle"
+        state: "idle",
+        triggered_complete_sound: false
     };
 }
 
@@ -43,6 +44,14 @@ function update_waves(dt)
             {
                 var t = (10 - wave.countdown) / 10;
                 hurry_sound.setVolume(t * 0.5);
+            }
+            if (!wave.triggered_complete_sound)
+            {
+                if (wave.countdown <= 0.8)
+                {
+                    wave.triggered_complete_sound = true;
+                    playSound("wave_completed.wav");
+                }
             }
             if (wave.countdown <= 0)
             {

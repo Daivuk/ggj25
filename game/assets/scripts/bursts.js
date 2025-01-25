@@ -36,7 +36,7 @@ function render_bursts()
     for (var i = 0; i < bursts.length; ++i)
     {
         var burst = bursts[i];
-        var scale = (1 + burst.t) * 0.5;
+        var scale = (1 + burst.t) * 0.5 * burst.radius / 64;
         var alpha = 1 - burst.t;
         SpriteBatch.drawSprite(burst_texture, burst.pos, new Color(alpha), burst.angle, scale);
     }

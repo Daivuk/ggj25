@@ -160,7 +160,7 @@ function burst_bubble(bubble)
             add_flare(bubble.pos, "+" + bubble.score, Color.fromHexRGB(0x23d245), FLARE_STYLE_GOOD);
     }
     else if (bubble.score < 0)
-        add_flare(bubble.pos, bubble.score, Color.fromHexRGB(0xe43113), FLARE_STYLE_BAD);
+        add_flare(bubble.pos, "" + bubble.score, Color.fromHexRGB(0xe43113), FLARE_STYLE_BAD);
 
     playSoundCue("pop.cue", 1);
 
@@ -168,13 +168,13 @@ function burst_bubble(bubble)
     for (var i = 0; i < bubbles.length; ++i)
     {
         var other_bubble = bubbles[i];
-        var dist = bubble.radius + other_bubble.radius;
-        if (Vector2.distance(bubble.pos, other_bubble.pos) < dist + 5)
+        if (other_bubble.burst_timer == 0)
         {
-            if (other_bubble.burst_timer == 0)
+            var dist = bubble.radius + other_bubble.radius;
+            if (Vector2.distance(bubble.pos, other_bubble.pos) < dist + 5)
             {
                 other_bubble.burst_timer = Random.randNumber(.09, .11);
-                other_bubble.score = bubble.score * 2;
+                other_bubble.score = Math.ceil(get_bubble_t(other_bubble) * bubble.score * 2);
             }
         }
     }

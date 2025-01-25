@@ -8,6 +8,7 @@ var mouse_pos = new Vector2(0, 0);
 var screen_transform = new Matrix();
 var score = 0;
 
+init_uis();
 init_upgrades()
 init_waves()
 init_bath()
@@ -31,6 +32,7 @@ function update_camera()
 function update(dt)
 {
     update_camera();
+    update_uis(dt);
     update_waves(dt)
     update_bath(dt);
     udpate_bubbles(dt)
@@ -64,10 +66,11 @@ function render()
 
     SpriteBatch.begin(screen_transform);
     render_bursts();
-    render_flares();
     SpriteBatch.end();
+    render_flares();
 
     SpriteBatch.begin(screen_transform);
+    render_uis();
     SpriteBatch.drawText(bubble_font, "Wave " + wave.number, new Vector2(-8, 10), Vector2.TOP_RIGHT);
     SpriteBatch.drawText(bubble_font, "Countdown " + Math.ceil(wave.countdown), new Vector2(-8, 40), Vector2.TOP_RIGHT);
     SpriteBatch.drawText(bubble_font, "Score " + score, new Vector2(-8, 70), Vector2.TOP_RIGHT);
