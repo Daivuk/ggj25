@@ -142,7 +142,7 @@ function end_wave()
         wave.state = "failed"
         setTimeout(function(){playSound("fail.wav")}, 300);
     }
-    else if (wave.number == 9)
+    else if (wave.number == 10)
     {
         wave.state = "win";
         setTimeout(function(){playSound("win.wav")}, 300);
