@@ -198,7 +198,7 @@ function update_bubble(bubble, dt)
 
 function udpate_bubbles(dt)
 {
-    if (wave.state == "show score")
+    if (wave.state != "in wave")
     {
         for (var i = 0; i < bubbles.length; ++i)
         {

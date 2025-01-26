@@ -7,6 +7,8 @@ var bubble_font = getFont("bubble.fnt");
 var mouse_pos = new Vector2(0, 0);
 var screen_transform = new Matrix();
 var score = 0;
+var fireworks_delay = 0.6;
+var fireworks_count = 0;
 
 // Preload assets
 getSound("bad_score.wav");
@@ -30,6 +32,9 @@ getSound("wave_completed.wav");
 getSound("ding0.wav");
 getSound("ding1.wav");
 getSound("ding2.wav");
+getSound("fail.wav");
+getSound("win.wav");
+getSound("firework.wav");
 
 Input.setMouseIcon("needle.png", 0, 64);
 
@@ -110,6 +115,8 @@ var store_slots = [];
 var perk_slots = [];
 var frm_store;
 var passive_slots = [];
+var frm_fail;
+var frm_win;
 
 function create_game_uis()
 {
@@ -177,6 +184,111 @@ function create_game_uis()
             store_slots.push(perk_slot);
 
             parent_ui(perk_slot, create_ui("label", new Vector2(perk_slot.rect.w * 0.5, -24), "^001PerkName"));
+        }
+    }
+
+    //--- Fail UI
+    {
+        frm_fail = parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x * 0.5 - 200, BATH_SIZE.y * 2)));
+        frm_fail.rect.w = 400
+        frm_fail.rect.h = 300
+        frm_fail.color = Color.fromHexRGB(0xf6e9c7);
+
+        // Title
+        var lbl_title = parent_ui(frm_fail, create_ui("label", new Vector2(200, 34), "^000Game Over"));
+        var lbl_title = parent_ui(frm_fail, create_ui("label", new Vector2(200, 32), "^821Game Over"));
+        // lbl_title.outline = true;
+            
+        var play_button = parent_ui(frm_fail, create_ui("button", new Vector2(100, 120), "Play Again"))
+        play_button.color = Color.fromHexRGB(0x012f3b)
+        play_button.rect.w = 200;
+        play_button.rect.h = 32;
+        play_button.on_click = function(ui)
+        {
+            playSound("button.wav");
+            game_state = "game"
+                        
+            init_uis();
+            init_upgrades()
+            init_particles();
+            init_waves()
+            init_bath()
+            init_bubbles()
+            init_bursts();
+            init_flares();
+            init_perks();
+            init_store();
+
+            create_game_uis();
+            create_wave();
+            start_wave();
+        }
+
+        var quit_btn = parent_ui(frm_fail, create_ui("button", new Vector2(100, 180), "Quit"))
+        quit_btn.color = Color.fromHexRGB(0x012f3b)
+        quit_btn.rect.w = 200;
+        quit_btn.rect.h = 32;
+        quit_btn.on_click = function(ui)
+        {
+            playSound("button.wav");
+            setTimeout(function()
+            {
+                quit();
+            }, 100);
+        }
+    }
+
+    //--- Success UI
+    {
+        frm_win = parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x * 0.5 - 250, BATH_SIZE.y * 2)));
+        frm_win.rect.w = 500
+        frm_win.rect.h = 320
+        frm_win.color = Color.fromHexRGB(0xf6e9c7);
+
+        // Title
+        var lbl_title = parent_ui(frm_win, create_ui("label", new Vector2(250, 34), "^000YOU WIN !!!"));
+        var lbl_title = parent_ui(frm_win, create_ui("label", new Vector2(250, 32), "^285YOU WIN !!!"));
+        // lbl_title.outline = true;
+
+        var lbl_subtitle = parent_ui(frm_win, create_ui("label", new Vector2(250, 80), "You completed all waves!"));
+        lbl_subtitle.outline = true;
+            
+        var play_button = parent_ui(frm_win, create_ui("button", new Vector2(150, 140), "Play Again"))
+        play_button.color = Color.fromHexRGB(0x012f3b)
+        play_button.rect.w = 200;
+        play_button.rect.h = 32;
+        play_button.on_click = function(ui)
+        {
+            playSound("button.wav");
+            game_state = "game"
+                        
+            init_uis();
+            init_upgrades()
+            init_particles();
+            init_waves()
+            init_bath()
+            init_bubbles()
+            init_bursts();
+            init_flares();
+            init_perks();
+            init_store();
+
+            create_game_uis();
+            create_wave();
+            start_wave();
+        }
+
+        var quit_btn = parent_ui(frm_win, create_ui("button", new Vector2(150, 200), "Quit"))
+        quit_btn.color = Color.fromHexRGB(0x012f3b)
+        quit_btn.rect.w = 200;
+        quit_btn.rect.h = 32;
+        quit_btn.on_click = function(ui)
+        {
+            playSound("button.wav");
+            setTimeout(function()
+            {
+                quit();
+            }, 100);
         }
     }
 
@@ -256,6 +368,22 @@ function update(dt)
     //     parent_ui(needle_passive_ui, create_ui("label", new Vector2(64, 64), "0")).outline = true;
     //     passive_slots.push(needle_passive_ui);
     // }
+
+        if (wave.state == "win")
+        {
+            fireworks_delay -= dt;
+            if (fireworks_delay <= 0 && fireworks_count < 10)
+            {
+                ++fireworks_count;
+                fireworks_delay = 0.6;
+                var pos = Random.randVector2(new Vector2(0, 50), new Vector2(BATH_SIZE.x, BATH_SIZE.y - 150));
+                for (var i = 0; i < 100; ++i)
+                {
+                    add_particle(Random.randCircleEdge(pos, 75), Random.randColor().add(new Color(0.5)));
+                }
+                playSound("firework.wav", 1, 0, Random.randNumber(1.0, 1.2));
+            }
+        }
     }
 }
 

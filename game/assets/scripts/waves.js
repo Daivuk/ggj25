@@ -73,7 +73,7 @@ function start_wave()
     wave.number++;
     wave.state = "in wave"
     wave.state_time = 0;
-    wave.countdown = 60;
+    wave.countdown = 10;
     wave.spawn_delay = 1;
     wave.triggered_complete_sound = false;
 
@@ -100,7 +100,23 @@ function get_random_bubble_type()
 function end_wave()
 {
     hurry_sound.setVolume(0);
-    wave.state = "show score"
+
+    if (score < wave.score_goal)
+    {
+        wave.state = "failed"
+        setTimeout(function(){playSound("fail.wav")}, 300);
+    }
+    else if (wave.number == 9)
+    {
+        wave.state = "win";
+        setTimeout(function(){playSound("win.wav")}, 300);
+        fireworks_delay = 0.6;
+        fireworks_count = 0;
+    }
+    else
+    {
+        wave.state = "show score"
+    }
     wave.state_time = 0;
 
     // Populate store
@@ -159,6 +175,18 @@ function update_waves(dt)
             }
             break;
         }
+        case "failed":
+        {
+            var show_store_t = Math.min(1, wave.state_time * 3);
+            frm_fail.rect.y = lerpNumber(BATH_SIZE.y * 2, BATH_SIZE.y * 0.5 - 150, show_store_t);
+            break;
+        }
+        case "win":
+        {
+            var show_store_t = Math.min(1, wave.state_time * 3);
+            frm_win.rect.y = lerpNumber(BATH_SIZE.y * 2, BATH_SIZE.y * 0.5 - 150, show_store_t);
+            break;
+        }
     }
 }
 
@@ -166,6 +194,8 @@ function render_waves_overlay(dt)
 {
     switch (wave.state)
     {
+        case "failed":
+        case "win":
         case "show score":
         {
             var fade_t = Math.min(1, wave.state_time * 3);

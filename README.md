@@ -24,5 +24,7 @@ On Linux is should work just as on Mac, but hasn't been tested in a long time.
 - balloon movement sounds by Yuval -- https://freesound.org/s/210892/ -- License: Creative Commons 0
 - metal-multi-hits.mp3 by lesaucisson -- https://freesound.org/s/585258/ -- License: Creative Commons 0
 - Metal hit with dull ringouts by Artninja -- https://freesound.org/s/717721/ -- License: Attribution 4.0
+- fail9.wav by Tissman -- https://freesound.org/s/457755/ -- License: Creative Commons 0
+- music game, win or high score.wav by xtrgamr -- https://freesound.org/s/244536/ -- License: Attribution 4.0
 ### Tech
 - Use OakNut engine (onut): https://github.com/Daivuk/onut
