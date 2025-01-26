@@ -9,6 +9,15 @@ function render_tooltip()
     }
 }
 
+function render_garbage_tooltip(ui)
+{
+    var rect = new Rect(ui.world_rect.x + ui.world_rect.w + 16, ui.world_rect.y - 200, 300, 270);
+    var x_center = rect.x + rect.w * 0.5;
+    draw_rect(rect, Color.fromHexRGB(0x012f3b));
+    SpriteBatch.drawText(bubble_font, "^821Garbage can", new Vector2(x_center, rect.y + 24), Vector2.CENTER);
+    SpriteBatch.drawText(bubble_font, "Drag perk here to delete it", new Vector2(x_center, rect.y + 60), Vector2.TOP, Color.WHITE, 250);
+}
+
 function render_perk_toolkit(ui)
 {
     if (!ui.perk) return;

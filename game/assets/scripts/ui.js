@@ -140,7 +140,12 @@ function update_uis(dt)
     {
         if (dragging)
         {
-            if (hovered_ui != down_ui && hovered_ui && hovered_ui.can_drag)
+            if (hovered_ui == garbage)
+            {
+                dragging.perk = null;
+                dragging.image = null;
+            }
+            else if (hovered_ui != down_ui && hovered_ui && hovered_ui.can_drag)
             {
                 var perk = dragging.perk;
                 var uvs = dragging.image_uvs;

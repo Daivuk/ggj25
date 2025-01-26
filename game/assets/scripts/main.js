@@ -117,6 +117,7 @@ var frm_store;
 var passive_slots = [];
 var frm_fail;
 var frm_win;
+var garbage;
 
 function create_game_uis()
 {
@@ -170,6 +171,14 @@ function create_game_uis()
 
         parent_ui(passive_ui, create_ui("label", new Vector2(64, 64), "0")).outline = true;
         passive_slots.push(passive_ui);
+    }
+
+    {
+        garbage = parent_ui(ui_root, create_ui("image", new Vector2(BATH_SIZE.x + 50, BATH_SIZE.y - 16 - 64), null, "garbage.png"));
+        garbage.rect.w = 76;
+        garbage.rect.h = 76;
+        garbage.click_through = false;
+        garbage.tooltip = render_garbage_tooltip;
     }
 
     //--- Store UI
