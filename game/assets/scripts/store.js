@@ -31,7 +31,7 @@ function populate_store()
     }
 
     // Distribute the perks by rarity
-    var rarities = [[],[],[]];
+    var rarities = [[],[],[],[]];
     var upgrades = [];
     for (var i = 0; i < available_perks.length; ++i)
     {
@@ -50,23 +50,28 @@ function populate_store()
     {
         var store_slot = store_slots[i];
         if ((Random.randBool(0.5) && upgrades.length) > 0 ||
-            (rarities[RARITY_COMMON].length == 0 && rarities[RARITY_UNCOMMON].length == 0 && rarities[RARITY_RARE].length == 0))
+            (rarities[RARITY_COMMON].length == 0 && rarities[RARITY_UNCOMMON].length == 0 && rarities[RARITY_RARE].length == 0 && rarities[RARITY_LEGENDARY].length == 0))
         {
             store_slot.perk = upgrades.splice(Random.getNext(upgrades.length), 1)[0];
         }
         else if (Random.randBool(0.7) && rarities[RARITY_COMMON].length > 0 ||
-            (rarities[RARITY_UNCOMMON].length == 0 && rarities[RARITY_RARE].length == 0))
+            (rarities[RARITY_UNCOMMON].length == 0 && rarities[RARITY_RARE].length == 0 && rarities[RARITY_LEGENDARY].length == 0))
         {
             store_slot.perk = rarities[RARITY_COMMON].splice(Random.getNext(rarities[RARITY_COMMON].length), 1)[0];
         }
         else if (Random.randBool(0.83) && rarities[RARITY_UNCOMMON].length > 0 ||
-            (rarities[RARITY_RARE].length == 0))
+            (rarities[RARITY_RARE].length == 0 && rarities[RARITY_LEGENDARY].length == 0))
         {
             store_slot.perk = rarities[RARITY_UNCOMMON].splice(Random.getNext(rarities[RARITY_UNCOMMON].length), 1)[0];
         }
-        else if (rarities[RARITY_RARE].length > 0)
+        else if (Random.randBool(0.9) && rarities[RARITY_RARE].length > 0 ||
+            (rarities[RARITY_LEGENDARY].length == 0))
         {
             store_slot.perk = rarities[RARITY_RARE].splice(Random.getNext(rarities[RARITY_RARE].length), 1)[0];
+        }
+        else if (rarities[RARITY_LEGENDARY].length > 0)
+        {
+            store_slot.perk = rarities[RARITY_LEGENDARY].splice(Random.getNext(rarities[RARITY_LEGENDARY].length), 1)[0];
         }
         else
         {

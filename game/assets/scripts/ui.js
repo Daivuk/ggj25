@@ -81,7 +81,7 @@ function create_ui(style, pos, text, image_filename)
             click_through: false
         }
         case "image": return {
-            rect: new Rect(0, 0, 0, 0),
+            rect: new Rect(pos.x, pos.y, 64, 64),
             text: text,
             bg_image: null,
             image: getTexture(image_filename),

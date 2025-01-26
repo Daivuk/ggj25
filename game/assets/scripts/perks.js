@@ -1,17 +1,20 @@
 var RARITY_COMMON = 0;
 var RARITY_UNCOMMON = 1;
 var RARITY_RARE = 2;
+var RARITY_LEGENDARY = 3;
 
 var RARITY_COLORS = [
     Color.fromHexRGB(0xd6f4e9).mul(new Color(0.5, 0.5, 0.5, 1)),
     Color.fromHexRGB(0x45e98d),
-    Color.fromHexRGB(0xe43113)
+    Color.fromHexRGB(0xe43113),
+    Color.fromHexRGB(0xf2e487),
 ];
 
 var RARITY_TEXTS = [
     "Common",
     "Uncommon",
-    "Rare"
+    "Rare",
+    "Legendary"
 ];
 
 var COL_POSITIVE = "^285"
@@ -67,16 +70,6 @@ var PERKS = [
             return distance * 1.25;
         }
     },
-    // {
-    //     name: "Long Arm",
-    //     description: "Increase neighbor bursts distance by " + COL_POSITIVE + "25%",
-    //     rarity: RARITY_UNCOMMON,
-    //     icon_uvs: get_perk_uvs(2),
-    //     get_burst_dist: function(distance)
-    //     {
-    //         return distance * 1.25;
-    //     }
-    // },
 
     //--- RARE
     {
@@ -87,6 +80,18 @@ var PERKS = [
         get_spawn_range: function(range)
         {
             return 150;
+        }
+    },
+
+    //--- LEGENDARY
+    {
+        name: "Self-discipline",
+        description: "Bubbles score when bursting by themselves",
+        rarity: RARITY_LEGENDARY,
+        icon_uvs: get_perk_uvs(5),
+        should_self_burst_score: function(should_score)
+        {
+            return true;
         }
     },
 
@@ -116,14 +121,22 @@ var PERKS = [
                 on_poke: function(damage, bubble)
                 {
                     if (bubble.is_steel) return 0;
-                    return damage * 1.5
+                    return damage * 1.5 * 1.5
                 }
             },
             {
                 description: "Needle can pierce steel bubbles",
                 on_poke: function(damage, bubble)
                 {
-                    return damage * 1.5
+                    return damage * 1.5 * 1.5
+                }
+            },
+            {
+                description: "Needle does " + COL_POSITIVE + "100%^999 more damage",
+                on_poke: function(damage, bubble)
+                {
+                    if (bubble.is_steel) return 0;
+                    return damage * 1.5 * 1.5 * 2.0
                 }
             }
         ]
