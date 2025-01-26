@@ -8,10 +8,25 @@ var mouse_pos = new Vector2(0, 0);
 var screen_transform = new Matrix();
 var score = 0;
 
+// Preload assets
+getSound("bad_score.wav");
+getSound("button.wav");
+getSound("buy.wav");
+getSound("good_score.wav");
+getSound("hurry.wav");
+getSound("pop0.wav");
+getSound("pop1.wav");
+getSound("pop2.wav");
+getSound("pop3.wav");
+getSound("pop4.wav");
+getSound("pop5.wav");
+getSound("wave_completed.wav");
+
 Input.setMouseIcon("needle.png", 0, 64);
 
 init_uis();
 init_upgrades()
+init_particles();
 init_waves()
 init_bath()
 init_bubbles()
@@ -39,6 +54,7 @@ function create_main_menu_uis()
     play_button.rect.h = 32;
     play_button.on_click = function(ui)
     {
+        playSound("button.wav");
         game_state = "game"
         init_uis();
         create_game_uis();
@@ -51,7 +67,11 @@ function create_main_menu_uis()
     quit_btn.rect.h = 32;
     quit_btn.on_click = function(ui)
     {
-        quit();
+        playSound("button.wav");
+        setTimeout(function()
+        {
+            quit();
+        }, 100);
     }
 }
 
@@ -133,6 +153,7 @@ function update_camera()
 function update(dt)
 {
     update_camera();
+    update_particles(dt);
     update_uis(dt);
     if (game_state == "game")
     {
@@ -180,13 +201,14 @@ function render()
     SpriteBatch.begin(screen_transform);
     render_bursts();
     SpriteBatch.end();
+
     render_flares();
 
-    render_waves_overlay();
-
     SpriteBatch.begin(screen_transform);
+    render_waves_overlay();
     render_uis();
     render_tooltip();
+    render_particles();
     SpriteBatch.end();
 }
 

@@ -15,6 +15,11 @@ function add_burst(pos, radius)
         angle: Random.getNext(360)
     };
     bursts.push(burst);
+
+    for (var i = 0; i < radius; ++i)
+    {
+        add_particle(Random.randCircleEdge(pos, radius), Random.randColor(Color.fromHexRGB(0xd6f4e9), Color.fromHexRGB(0x23d2d2)));
+    }
 }
 
 function update_bursts(dt)

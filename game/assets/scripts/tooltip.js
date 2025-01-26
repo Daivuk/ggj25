@@ -21,6 +21,14 @@ function render_perk_toolkit(ui)
     SpriteBatch.drawText(bubble_font, ui.perk.name, new Vector2(x_center, rect.y + 24), Vector2.CENTER);
     if (ui.perk.upgrade)
     {
+        SpriteBatch.drawText(bubble_font, "Next upgrade:", new Vector2(x_center, rect.y + 60), Vector2.CENTER, Color.fromHexRGB(0xe43113));
+        var level = 0;
+        var passive = get_passive(ui.perk.name);
+        if (passive)
+        {
+            level = passive.level + 1;
+        }
+        SpriteBatch.drawText(bubble_font, ui.perk.levels[level].description, new Vector2(x_center, rect.y + 130), Vector2.TOP, Color.WHITE, 250);
     }
     else
     {

@@ -153,17 +153,17 @@ function render_waves_overlay(dt)
         case "show score":
         {
             var fade_t = Math.min(1, wave.state_time * 3);
-            SpriteBatch.begin();
-            SpriteBatch.drawRect(null, new Rect(0, 0, res.x, res.y), new Color(0, 0, 0, fade_t * 0.5));
-            SpriteBatch.end();
+            // SpriteBatch.begin();
+            SpriteBatch.drawRect(null, new Rect(0, 0, BATH_SIZE.x, BATH_SIZE.y), new Color(0, 0, 0, fade_t * 0.5));
+            // SpriteBatch.end();
             break;
         }
         case "hide score":
         {
             var fade_t = 1 - Math.min(1, wave.state_time * 3);
-            SpriteBatch.begin();
-            SpriteBatch.drawRect(null, new Rect(0, 0, res.x, res.y), new Color(0, 0, 0, fade_t * 0.5));
-            SpriteBatch.end();
+            // SpriteBatch.begin();
+            SpriteBatch.drawRect(null, new Rect(0, 0, BATH_SIZE.x, BATH_SIZE.y), new Color(0, 0, 0, fade_t * 0.5));
+            // SpriteBatch.end();
             break;
         }
     }

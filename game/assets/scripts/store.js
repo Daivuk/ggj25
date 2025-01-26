@@ -80,3 +80,51 @@ function populate_store()
         store_slot.children[0].text = "^001" + store_slot.perk.name;
     }
 }
+
+function chose_story_perk(ui)
+{
+    if (wave.state != "show score") return;
+
+    if (ui.perk.upgrade)
+    {
+        var passive = get_passive(ui.perk.name);
+        if (passive)
+        {
+            passive.level++;
+            wave.state = "hide score"
+            wave.state_time = 0;
+            playSound("buy.wav");
+            return;
+        }
+
+        // Shouldn't happen
+        playSound("bad_score.wav");
+        return;
+    }
+    else
+    {
+        for (var i = 0; i < perk_slots.length; ++i)
+        {
+            var perk_slot = perk_slots[i];
+            if (!perk_slot.perk)
+            {
+                perk_slot.perk = ui.perk;
+                perk_slot.image_uvs = perk_slot.perk.icon_uvs;
+                perk_slot.image = perks_texture;
+                for (var j = 0; j < 75; ++j)
+                {
+                    var pos = new Vector2(perk_slot.world_rect.x - 5, perk_slot.world_rect.y).add(randomPointOnRoundedSquareEdge(perk_slot.rect.w + 10, 7));
+                    add_particle(pos, Random.randColor(Color.fromHexRGB(0xf5deb3), Color.fromHexRGB(0xed8848)));
+                }
+                wave.state = "hide score"
+                wave.state_time = 0;
+                playSound("buy.wav");
+                return;
+            }
+        }
+
+        // Error! No more room
+        playSound("bad_score.wav");
+        return;
+    }
+}

@@ -105,13 +105,12 @@ function update_ui(ui, pos, dt)
     {
         update_ui(ui.children[i], world_pos, dt);
     }
+    ui.world_rect = new Rect(world_pos.x, world_pos.y, ui.rect.w, ui.rect.h);
     if (!hovered_ui)
     {
-        var rect = new Rect(pos.x + ui.rect.x, pos.y + ui.rect.y, ui.rect.w, ui.rect.h);
-        if (rect.contains(mouse_pos))
+        if (ui.world_rect.contains(mouse_pos))
         {
             hovered_ui = ui;
-            hovered_ui.world_rect = rect;
         }
     }
 }
