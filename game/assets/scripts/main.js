@@ -131,13 +131,14 @@ function create_game_uis()
         parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x + 50, 16))),
         parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x + 50, 16 + 96))),
         parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x + 50, 16 + 96 * 2))),
-        parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x + 50, 16 + 96 * 3))),
+        parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x + 50, 16 + 96 * 3)))
     ]
 
     for (var i = 0; i < perk_slots.length; ++i)
     {
         var perk_slot = perk_slots[i];
         perk_slot.rect.w = 76;
+        perk_slot.can_drag = true;
         perk_slot.rect.h = 76;
         perk_slot.bg_image = getTexture("ui_slot_bg.png");
         perk_slot.perk = null;
@@ -292,16 +293,22 @@ function create_game_uis()
         }
     }
 
-    // {
-    //     var hackPerk = get_perk("Self-discipline")
-    //     var perk_slot = perk_slots[0];
+    {
+        var hackPerk = get_perk("Self-discipline")
+        var perk_slot = perk_slots[0];
         
-    //     perk_slot.perk = hackPerk;
-    //     perk_slot.image_uvs = perk_slot.perk.icon_uvs;
-    //     perk_slot.image = perks_texture;
-
-    //     playSound("buy.wav");
-    // }
+        perk_slot.perk = hackPerk;
+        perk_slot.image_uvs = perk_slot.perk.icon_uvs;
+        perk_slot.image = perks_texture;
+    }
+    {
+        var hackPerk = get_perk("Parrot")
+        var perk_slot = perk_slots[1];
+        
+        perk_slot.perk = hackPerk;
+        perk_slot.image_uvs = perk_slot.perk.icon_uvs;
+        perk_slot.image = perks_texture;
+    }
 }
 
 function update_camera()

@@ -24,18 +24,53 @@ var WAVES = [
         steel_bubbles_chances: 1
     },
     {
-        score_goal: 1500,
+        score_goal: 700,
         spawn_rate: 2.5,
         normal_bubbles_chances: 40,
         green_bubbles_chances: 20,
         steel_bubbles_chances: 5
     },
     {
-        score_goal: 2500,
+        score_goal: 1500,
         spawn_rate: 2.5,
         normal_bubbles_chances: 40,
         green_bubbles_chances: 30,
         steel_bubbles_chances: 10
+    },
+    {
+        score_goal: 3000,
+        spawn_rate: 2.5,
+        normal_bubbles_chances: 40,
+        green_bubbles_chances: 30,
+        steel_bubbles_chances: 10
+    },
+    {
+        score_goal: 4000,
+        spawn_rate: 2.5,
+        normal_bubbles_chances: 30,
+        green_bubbles_chances: 40,
+        steel_bubbles_chances: 10
+    },
+    {
+        score_goal: 6000,
+        spawn_rate: 2.5,
+        normal_bubbles_chances: 20,
+        green_bubbles_chances: 40,
+        steel_bubbles_chances: 1
+    },
+    {
+        score_goal: 8000,
+        spawn_rate: 5,
+        normal_bubbles_chances: 20,
+        green_bubbles_chances: 40,
+        steel_bubbles_chances: 1
+    },
+    {
+        score_goal: 10000,
+        spawn_rate: 2.5,
+        normal_bubbles_chances: 0,
+        green_bubbles_chances: 0,
+        steel_bubbles_chances: 1
     }
 ]
 
@@ -73,7 +108,7 @@ function start_wave()
     wave.number++;
     wave.state = "in wave"
     wave.state_time = 0;
-    wave.countdown = 10;
+    wave.countdown = 60;
     wave.spawn_delay = 1;
     wave.triggered_complete_sound = false;
 
@@ -85,15 +120,16 @@ function start_wave()
 
 function get_random_bubble_type()
 {
-    var total_chances =
-        wave.normal_bubbles_chances + 
-        wave.green_bubbles_chances + 
-        wave.steel_bubbles_chances;
+    var norm_chances = invoke_perks("get_bubble_chances", wave.normal_bubbles_chances, "normal");
+    var green_chances = invoke_perks("get_bubble_chances", wave.green_bubbles_chances, "green");
+    var steel_chances = invoke_perks("get_bubble_chances", wave.steel_bubbles_chances, "steel");
+
+    var total_chances = norm_chances + green_chances + steel_chances;
     
     var rnd = Random.getNext(total_chances);
-    if (rnd < wave.normal_bubbles_chances) return "normal";
-    rnd -= wave.normal_bubbles_chances;
-    if (rnd < wave.green_bubbles_chances) return "green";
+    if (rnd < norm_chances) return "normal";
+    rnd -= norm_chances;
+    if (rnd < green_chances) return "green";
     return "steel";
 }
 
@@ -132,10 +168,14 @@ function update_waves(dt)
         case "in wave":
         {
             wave.countdown -= dt;
-            if (wave.countdown < 10)
+            if (wave.countdown <= 10)
             {
                 var t = (10 - wave.countdown) / 10;
                 hurry_sound.setVolume(t * 0.5);
+            }
+            else
+            {
+                if (score >= wave.score_goal) wave.countdown = 10;
             }
             if (!wave.triggered_complete_sound)
             {

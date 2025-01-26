@@ -58,6 +58,28 @@ var PERKS = [
             return damage + 2
         }
     },
+    {
+        name: "Clover",
+        description: COL_POSITIVE + "50%^999 less green bubbles",
+        rarity: RARITY_COMMON,
+        icon_uvs: get_perk_uvs(7),
+        get_bubble_chances: function(chances, type)
+        {
+            if (type == "green") return Math.floor(chances / 2);
+            return chances
+        }
+    },
+    {
+        name: "Horseshoe",
+        description: COL_POSITIVE + "50%^999 less steel bubbles",
+        rarity: RARITY_COMMON,
+        icon_uvs: get_perk_uvs(8),
+        get_bubble_chances: function(chances, type)
+        {
+            if (type == "steel") return Math.floor(chances / 2);
+            return chances
+        }
+    },
 
     //--- UNCOMMON
     {
@@ -69,6 +91,23 @@ var PERKS = [
         {
             return distance * 1.25;
         }
+    },
+    {
+        name: "Twins",
+        description: COL_POSITIVE + "Double^999 the score",
+        rarity: RARITY_UNCOMMON,
+        icon_uvs: get_perk_uvs(6),
+        on_score: function(score)
+        {
+            return score * 2;
+        }
+    },
+    {
+        name: "Parrot",
+        description: "Copies the ability of the previous perk",
+        rarity: RARITY_UNCOMMON,
+        icon_uvs: get_perk_uvs(9),
+        copy_previous: true
     },
 
     //--- RARE
@@ -156,14 +195,21 @@ function get_perk(name)
 function invoke_perks(fnName, param, arg1)
 {
     // Perks
+    var prev_perk = null;
     for (var i = 0; i < perk_slots.length; ++i)
     {
         var img_perk = perk_slots[i];
         var perk = img_perk.perk;
+        if (perk && perk.copy_previous)
+        {
+            if (prev_perk) perk = prev_perk;
+            else continue; // Nothing can do
+        }
         if (perk && perk.hasOwnProperty(fnName))
         {
             param = perk[fnName](param, arg1);
         }
+        prev_perk = perk;
     }
 
     // Passives (Bad name, they are all passives)

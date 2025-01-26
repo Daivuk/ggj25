@@ -2,6 +2,7 @@ var ui_root = create_ui("node", Vector2.ZERO);
 var hovered_ui = null;
 var down_ui = null;
 var ui_frame_texture = getTexture("ui_bg.png");
+var dragging = null;
 
 function parent_ui(parent, ui)
 {
@@ -129,11 +130,31 @@ function update_uis(dt)
 
     if (Input.isJustDown(Key.MOUSE_1))
     {
-        if (hovered_ui) down_ui = hovered_ui;
+        if (hovered_ui)
+        {
+            down_ui = hovered_ui;
+            if (down_ui.can_drag) dragging = down_ui;
+        }
     }
     else if (Input.isJustUp(Key.MOUSE_1))
     {
-        if (down_ui && hovered_ui == down_ui)
+        if (dragging)
+        {
+            if (hovered_ui != down_ui && hovered_ui && hovered_ui.can_drag)
+            {
+                var perk = dragging.perk;
+                var uvs = dragging.image_uvs;
+                var image = dragging.image;
+                dragging.perk = hovered_ui.perk;
+                dragging.image_uvs = hovered_ui.image_uvs;
+                dragging.image = hovered_ui.image;
+                hovered_ui.perk = perk;
+                hovered_ui.image_uvs = uvs;
+                hovered_ui.image = image;
+            }
+            dragging = null;
+        }
+        else if (down_ui && hovered_ui == down_ui)
         {
             if (down_ui.on_click) down_ui.on_click(down_ui);
         }
@@ -197,4 +218,12 @@ function render_ui(ui, pos)
 function render_uis()
 {
     render_ui(ui_root, Vector2.ZERO);
+
+    if (dragging && dragging.image)
+    {
+        if (dragging.image_uvs)
+            SpriteBatch.drawSpriteWithUVs(dragging.image, mouse_pos, dragging.image_uvs, dragging.color, 0, 1, Vector2.CENTER);
+        else
+            SpriteBatch.drawSprite(dragging.image, mouse_pos, dragging.color, 0, 1, Vector2.CENTER);
+    }
 }
