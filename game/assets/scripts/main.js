@@ -162,16 +162,16 @@ function create_game_uis()
         }
     }
 
-    {
-        var hackPerk = get_perk("Self-discipline")
-        var perk_slot = perk_slots[0];
+    // {
+    //     var hackPerk = get_perk("Self-discipline")
+    //     var perk_slot = perk_slots[0];
         
-        perk_slot.perk = hackPerk;
-        perk_slot.image_uvs = perk_slot.perk.icon_uvs;
-        perk_slot.image = perks_texture;
+    //     perk_slot.perk = hackPerk;
+    //     perk_slot.image_uvs = perk_slot.perk.icon_uvs;
+    //     perk_slot.image = perks_texture;
 
-        playSound("buy.wav");
-    }
+    //     playSound("buy.wav");
+    // }
 }
 
 function update_camera()

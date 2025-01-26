@@ -7,7 +7,7 @@ var RARITY_COLORS = [
     Color.fromHexRGB(0xd6f4e9).mul(new Color(0.5, 0.5, 0.5, 1)),
     Color.fromHexRGB(0x45e98d),
     Color.fromHexRGB(0xe43113),
-    Color.fromHexRGB(0xf2e487),
+    Color.fromHexRGB(0xed8848),
 ];
 
 var RARITY_TEXTS = [
@@ -86,7 +86,7 @@ var PERKS = [
     //--- LEGENDARY
     {
         name: "Self-discipline",
-        description: "Bubbles score when bursting by themselves",
+        description: "Bubbles score 50% when bursting by themselves",
         rarity: RARITY_LEGENDARY,
         icon_uvs: get_perk_uvs(5),
         should_self_burst_score: function(should_score)

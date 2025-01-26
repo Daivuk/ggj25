@@ -156,7 +156,7 @@ function update_bubble(bubble, dt)
             var should_score = invoke_perks("should_self_burst_score", bubble.false);
             if (should_score)
             {
-                bubble.score = calc_bubble_score(bubble);
+                bubble.score = Math.ceil(calc_bubble_score(bubble) * 0.5);
             }
             burst_bubble(bubble);
             return false;
