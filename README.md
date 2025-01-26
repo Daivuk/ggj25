@@ -2,7 +2,10 @@
 ## Theme: **Bubble**
 
 ![title.png](screenshots/title.png)
+![title.png](screenshots/screenshot1.png)
+![title.png](screenshots/screenshot2.png)
 
+## Video Link:
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/VCPsoT92-sI/0.jpg)](https://www.youtube.com/watch?v=VCPsoT92-sI)
 
 ## Install
