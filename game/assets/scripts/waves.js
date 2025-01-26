@@ -53,7 +53,7 @@ var WAVES = [
     },
     {
         score_goal: 6000,
-        spawn_rate: 2.5,
+        spawn_rate: 3.0,
         normal_bubbles_chances: 20,
         green_bubbles_chances: 40,
         steel_bubbles_chances: 1
@@ -67,7 +67,7 @@ var WAVES = [
     },
     {
         score_goal: 10000,
-        spawn_rate: 2.5,
+        spawn_rate: 5,
         normal_bubbles_chances: 0,
         green_bubbles_chances: 0,
         steel_bubbles_chances: 1

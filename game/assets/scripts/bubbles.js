@@ -255,7 +255,10 @@ function burst_bubble(bubble)
             if (Vector2.distance(bubble.pos, other_bubble.pos) < burst_dist + 5)
             {
                 other_bubble.burst_timer = Random.randNumber(.09, .11);
-                other_bubble.score = Math.ceil(get_bubble_t(other_bubble) * bubble.score * 2);
+                var parent_score = on_combo;
+                var child_score = Math.ceil(get_bubble_t(other_bubble) * bubble.score * 2);
+                child_score = invoke_perks("on_combo", child_score, parent_score);
+                other_bubble.score = child_score;
             }
         }
     }

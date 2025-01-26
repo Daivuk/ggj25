@@ -10,6 +10,10 @@ function create_upgrades()
             {
                 level: 0,
                 perk: get_perk("Needle")
+            },
+            {
+                level: 0,
+                perk: get_perk("Score")
             }
         ]
     }

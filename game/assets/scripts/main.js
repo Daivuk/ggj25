@@ -148,16 +148,28 @@ function create_game_uis()
     // Passives
     passive_slots = [];
     {
-        var needle_passive_ui = parent_ui(ui_root, create_ui("image", new Vector2(BATH_SIZE.x + 50, 16 + 96 * 5), null, "perks.png"));
-        needle_passive_ui.rect.w = 76;
-        needle_passive_ui.rect.h = 76;
-        needle_passive_ui.click_through = false;
-        needle_passive_ui.perk = get_passive("Needle").perk;
-        needle_passive_ui.image_uvs = needle_passive_ui.perk.icon_uvs;
-        needle_passive_ui.tooltip = render_perk_toolkit;
+        var passive_ui = parent_ui(ui_root, create_ui("image", new Vector2(BATH_SIZE.x + 50, 16 + 96 * 4), null, "perks.png"));
+        passive_ui.rect.w = 76;
+        passive_ui.rect.h = 76;
+        passive_ui.click_through = false;
+        passive_ui.perk = get_passive("Needle").perk;
+        passive_ui.image_uvs = passive_ui.perk.icon_uvs;
+        passive_ui.tooltip = render_perk_toolkit;
 
-        parent_ui(needle_passive_ui, create_ui("label", new Vector2(64, 64), "0")).outline = true;
-        passive_slots.push(needle_passive_ui);
+        parent_ui(passive_ui, create_ui("label", new Vector2(64, 64), "0")).outline = true;
+        passive_slots.push(passive_ui);
+    }
+    {
+        var passive_ui = parent_ui(ui_root, create_ui("image", new Vector2(BATH_SIZE.x + 50, 16 + 96 * 5), null, "perks.png"));
+        passive_ui.rect.w = 76;
+        passive_ui.rect.h = 76;
+        passive_ui.click_through = false;
+        passive_ui.perk = get_passive("Score").perk;
+        passive_ui.image_uvs = passive_ui.perk.icon_uvs;
+        passive_ui.tooltip = render_perk_toolkit;
+
+        parent_ui(passive_ui, create_ui("label", new Vector2(64, 64), "0")).outline = true;
+        passive_slots.push(passive_ui);
     }
 
     //--- Store UI
@@ -293,22 +305,22 @@ function create_game_uis()
         }
     }
 
-    {
-        var hackPerk = get_perk("Self-discipline")
-        var perk_slot = perk_slots[0];
+    // {
+    //     var hackPerk = get_perk("Self-discipline")
+    //     var perk_slot = perk_slots[0];
         
-        perk_slot.perk = hackPerk;
-        perk_slot.image_uvs = perk_slot.perk.icon_uvs;
-        perk_slot.image = perks_texture;
-    }
-    {
-        var hackPerk = get_perk("Parrot")
-        var perk_slot = perk_slots[1];
+    //     perk_slot.perk = hackPerk;
+    //     perk_slot.image_uvs = perk_slot.perk.icon_uvs;
+    //     perk_slot.image = perks_texture;
+    // }
+    // {
+    //     var hackPerk = get_perk("Parrot")
+    //     var perk_slot = perk_slots[1];
         
-        perk_slot.perk = hackPerk;
-        perk_slot.image_uvs = perk_slot.perk.icon_uvs;
-        perk_slot.image = perks_texture;
-    }
+    //     perk_slot.perk = hackPerk;
+    //     perk_slot.image_uvs = perk_slot.perk.icon_uvs;
+    //     perk_slot.image = perks_texture;
+    // }
 }
 
 function update_camera()
@@ -364,16 +376,16 @@ function update(dt)
             passive_slot.children[0].text = "" + get_passive(passive_slot.perk.name).level;
         }
     // {
-    //     var needle_passive_ui = parent_ui(ui_root, create_ui("image", new Vector2(BATH_SIZE.x + 50, 16 + 96 * 5), null, "perks.png"));
-    //     needle_passive_ui.rect.w = 76;
-    //     needle_passive_ui.rect.h = 76;
-    //     needle_passive_ui.click_through = false;
-    //     needle_passive_ui.perk = get_passive("Needle").perk;
-    //     needle_passive_ui.image_uvs = needle_passive_ui.perk.icon_uvs;
-    //     needle_passive_ui.tooltip = render_perk_toolkit;
+    //     var passive_ui = parent_ui(ui_root, create_ui("image", new Vector2(BATH_SIZE.x + 50, 16 + 96 * 5), null, "perks.png"));
+    //     passive_ui.rect.w = 76;
+    //     passive_ui.rect.h = 76;
+    //     passive_ui.click_through = false;
+    //     passive_ui.perk = get_passive("Needle").perk;
+    //     passive_ui.image_uvs = passive_ui.perk.icon_uvs;
+    //     passive_ui.tooltip = render_perk_toolkit;
 
-    //     parent_ui(needle_passive_ui, create_ui("label", new Vector2(64, 64), "0")).outline = true;
-    //     passive_slots.push(needle_passive_ui);
+    //     parent_ui(passive_ui, create_ui("label", new Vector2(64, 64), "0")).outline = true;
+    //     passive_slots.push(passive_ui);
     // }
 
         if (wave.state == "win")

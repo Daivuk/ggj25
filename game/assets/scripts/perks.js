@@ -40,12 +40,12 @@ var PERKS = [
     //--- COMMON
     {
         name: "Tip",
-        description: "Add " + COL_POSITIVE + "2^999 points per scoring",
+        description: "Add " + COL_POSITIVE + "4^999 points per scoring",
         rarity: RARITY_COMMON,
         icon_uvs: get_perk_uvs(1),
         on_score: function(score)
         {
-            return score + 2
+            return score + 4
         }
     },
     {
@@ -121,6 +121,16 @@ var PERKS = [
             return 150;
         }
     },
+    {
+        name: "Lightning",
+        description: "Combos increase score transmission by " + COL_POSITIVE + "50%",
+        rarity: RARITY_RARE,
+        icon_uvs: get_perk_uvs(11),
+        on_combo: function(score, parent_score)
+        {
+            return Math.ceil(score * 1.5);
+        }
+    },
 
     //--- LEGENDARY
     {
@@ -156,7 +166,7 @@ var PERKS = [
                 }
             },
             {
-                description: "Needle does " + COL_POSITIVE + "100%^999 more damage",
+                description: "Needle does " + COL_POSITIVE + "200%^999 more damage",
                 on_poke: function(damage, bubble)
                 {
                     if (bubble.is_steel) return 0;
@@ -171,11 +181,52 @@ var PERKS = [
                 }
             },
             {
-                description: "Needle does " + COL_POSITIVE + "100%^999 more damage",
+                description: "Needle does " + COL_POSITIVE + "400%^999 more damage",
                 on_poke: function(damage, bubble)
                 {
                     if (bubble.is_steel) return 0;
                     return damage * 2 * 2 * 2
+                }
+            }
+        ]
+    },
+    {
+        name: "Score",
+        upgrade: true,
+        icon_uvs: get_perk_uvs(10),
+        levels: [
+            {
+                on_score: function(score)
+                {
+                    return score;
+                }
+            },
+            {
+                description: "Gain " + COL_POSITIVE + "10%^999 more score",
+                on_score: function(score)
+                {
+                    return Math.ceil(score * 1.1);
+                }
+            },
+            {
+                description: "Gain " + COL_POSITIVE + "30%^999 more score",
+                on_score: function(score)
+                {
+                    return Math.ceil(score * 1.3);
+                }
+            },
+            {
+                description: "Gain " + COL_POSITIVE + "60%^999 more score",
+                on_score: function(score)
+                {
+                    return Math.ceil(score * 1.6);
+                }
+            },
+            {
+                description: "Gain " + COL_POSITIVE + "100%^999 more score",
+                on_score: function(score)
+                {
+                    return Math.ceil(score * 2.0);
                 }
             }
         ]
