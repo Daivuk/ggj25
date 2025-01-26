@@ -1,4 +1,7 @@
 var bubbles = []
+var bubble_texture = getTexture("bubble.png");
+var bubble_green_texture = getTexture("bubble_green.png");
+var bubble_steel_texture = getTexture("bubble_steel.png");
 
 function init_bubbles()
 {
@@ -28,25 +31,28 @@ function create_bubble(pos)
         pos: pos,
         radius: 5,
         stress: 0,
-        life: 1,
+        life: 3,
         t: 0,
         shaking: false,
         shaking_t: 0,
         burst_timer: 0,
         score: 0,
-        color: Color.WHITE
+        color: Color.WHITE,
+        squeeze: 0,
+        texture: bubble_texture
     };
-    var type = get_random_bubble_type();
-    switch (type)
+    bubble.type = get_random_bubble_type();
+    switch (bubble.type)
     {
         case "green":
         {
-            bubble.color = Color.fromHexRGB(0x23d25b);
-            bubble.life = 3;
+            bubble.texture = bubble_green_texture;
+            bubble.life = 10;
             break;
         }
         case "steel":
         {
+            bubble.texture = bubble_steel_texture;
             bubble.is_steel = true;
             break;
         }
@@ -111,6 +117,24 @@ function update_bubble(bubble, dt)
         {
             burst_bubble(bubble);
             return false;
+        }
+    }
+
+    if (bubble.squeeze > 0)
+    {
+        bubble.squeeze -= dt;
+        if (bubble.squeeze < 0)
+        {
+            bubble.squeeze = 0;
+        }
+    }
+
+    if (bubble.ding > 0)
+    {
+        bubble.ding -= dt;
+        if (bubble.ding < 0)
+        {
+            bubble.ding = 0;
         }
     }
 
@@ -240,6 +264,25 @@ function poke_bubble(bubble)
         bubble.score = calc_bubble_score(bubble);
         burst_bubble(bubble);
     }
+    else
+    {
+        if (bubble.type == "steel")
+        {
+            bubble.ding = 0.125;
+            playSoundCue("ding.cue");
+            playSound("metal_low_impact.wav", 0.2, 0, Random.randNumber(1.0, 1.2));
+            for (var i = 0; i < 10; ++i)
+            {
+                add_particle(Random.randCircleEdge(mouse_pos, 5), Random.randColor(Color.fromHexRGB(0xf2bf87), Color.fromHexRGB(0xf6e9c7)));
+            }
+        }
+
+        else
+        {
+            bubble.squeeze = 0.25;
+            playSoundCue("squeeze.cue", 0.5);
+        }
+    }
 }
 
 function render_bubble(bubble)
@@ -250,6 +293,26 @@ function render_bubble(bubble)
     var edge_uvs = new Vector2(1 / 256, 0);
     var center_uvs = new Vector2(Math.min(radius / 190, 0.99), 0);
     var sides = 8 + Math.floor(radius / 2);
+
+    var radiusx = radius;
+    var radiusy = radius;
+
+    if (bubble.squeeze)
+    {
+        var t = bubble.squeeze * 4;
+        var sint = Math.sin(t * 10) * 0.5 + 0.5;
+        radiusx *= lerpNumber(-.2, .2, sint) * t + 1;
+        radiusy *= lerpNumber(.2, -.2, sint) * t + 1;
+    }
+
+    if (bubble.ding)
+    {
+        var t = bubble.ding * 8;
+        var sint = Math.sin(t * 40);
+        pos = pos.add(new Vector2(0, sint * 3));
+    }
+
+    PrimitiveBatch.begin(PrimitiveMode.TRIANGLE_LIST, bubble.texture, screen_transform);
     for (var i = 0; i < sides; ++i)
     {
         var t = i / sides;
@@ -261,14 +324,16 @@ function render_bubble(bubble)
 
         var cos_theta = Math.cos(angle);
         var sin_theta = Math.sin(angle);
-        PrimitiveBatch.draw(pos.add(new Vector2(cos_theta * radius, sin_theta * radius)), bubble.color, edge_uvs);
+        PrimitiveBatch.draw(pos.add(new Vector2(cos_theta * radiusx, sin_theta * radiusy)), bubble.color, edge_uvs);
 
         cos_theta = Math.cos(next_angle);
         sin_theta = Math.sin(next_angle);
-        PrimitiveBatch.draw(pos.add(new Vector2(cos_theta * radius, sin_theta * radius)), bubble.color, edge_uvs);
+        edge_uvs.y = t + 1 / sides;
+        PrimitiveBatch.draw(pos.add(new Vector2(cos_theta * radiusx, sin_theta * radiusy)), bubble.color, edge_uvs);
 
         PrimitiveBatch.draw(pos, bubble.color, center_uvs);
     }
+    PrimitiveBatch.end();
 }
 
 function render_bubbles()

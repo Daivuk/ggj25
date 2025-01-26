@@ -20,7 +20,16 @@ getSound("pop2.wav");
 getSound("pop3.wav");
 getSound("pop4.wav");
 getSound("pop5.wav");
+getSound("squeeze2.wav");
+getSound("squeeze3.wav");
+getSound("squeeze4.wav");
+getSound("squeeze5.wav");
+getSound("squeeze6.wav");
+getSound("squeeze7.wav");
 getSound("wave_completed.wav");
+getSound("ding0.wav");
+getSound("ding1.wav");
+getSound("ding2.wav");
 
 Input.setMouseIcon("needle.png", 0, 64);
 
@@ -193,10 +202,7 @@ function render()
     update_camera();
 
     render_bath();
-
-    PrimitiveBatch.begin(PrimitiveMode.TRIANGLE_LIST, getTexture("bubble.png"), screen_transform);
     render_bubbles()
-    PrimitiveBatch.end();
 
     SpriteBatch.begin(screen_transform);
     render_bursts();

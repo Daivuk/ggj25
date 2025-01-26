@@ -5,23 +5,23 @@ var WAVES = [
     {
         score_goal: 100,
         spawn_rate: 1,
-        normal_bubbles_chances: 1,
-        green_bubbles_chances: 0,
+        normal_bubbles_chances: 10,
+        green_bubbles_chances: 1,
         steel_bubbles_chances: 0
     },
     {
         score_goal: 250,
         spawn_rate: 1.2,
-        normal_bubbles_chances: 1,
-        green_bubbles_chances: 0,
+        normal_bubbles_chances: 10,
+        green_bubbles_chances: 3,
         steel_bubbles_chances: 0
     },
     {
         score_goal: 500,
         spawn_rate: 1.5,
-        normal_bubbles_chances: 5,
-        green_bubbles_chances: 1,
-        steel_bubbles_chances: 0
+        normal_bubbles_chances: 40,
+        green_bubbles_chances: 10,
+        steel_bubbles_chances: 1
     }
 ]
 
@@ -55,10 +55,11 @@ function start_wave()
 
     var wave_data = WAVES[wave.number];
 
+    score = 0;
     wave.number++;
     wave.state = "in wave"
     wave.state_time = 0;
-    wave.countdown = 6;
+    wave.countdown = 60;
     wave.spawn_delay = 1;
     wave.triggered_complete_sound = false;
 
@@ -77,6 +78,7 @@ function get_random_bubble_type()
     
     var rnd = Random.getNext(total_chances);
     if (rnd < wave.normal_bubbles_chances) return "normal";
+    rnd -= wave.normal_bubbles_chances;
     if (rnd < wave.green_bubbles_chances) return "green";
     return "steel";
 }
@@ -153,17 +155,13 @@ function render_waves_overlay(dt)
         case "show score":
         {
             var fade_t = Math.min(1, wave.state_time * 3);
-            // SpriteBatch.begin();
             SpriteBatch.drawRect(null, new Rect(0, 0, BATH_SIZE.x, BATH_SIZE.y), new Color(0, 0, 0, fade_t * 0.5));
-            // SpriteBatch.end();
             break;
         }
         case "hide score":
         {
             var fade_t = 1 - Math.min(1, wave.state_time * 3);
-            // SpriteBatch.begin();
             SpriteBatch.drawRect(null, new Rect(0, 0, BATH_SIZE.x, BATH_SIZE.y), new Color(0, 0, 0, fade_t * 0.5));
-            // SpriteBatch.end();
             break;
         }
     }

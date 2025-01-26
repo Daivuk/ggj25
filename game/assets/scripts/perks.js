@@ -42,7 +42,7 @@ var PERKS = [
         icon_uvs: get_perk_uvs(1),
         on_score: function(score)
         {
-            return score + 1
+            return score + 2
         }
     },
     {
@@ -59,7 +59,7 @@ var PERKS = [
     //--- UNCOMMON
     {
         name: "Long Arm",
-        description: "Increase neighbor bursts by " + COL_POSITIVE + "25%",
+        description: "Increase neighbor bursts distance by " + COL_POSITIVE + "25%",
         rarity: RARITY_UNCOMMON,
         icon_uvs: get_perk_uvs(2),
         get_burst_dist: function(distance)
@@ -67,6 +67,16 @@ var PERKS = [
             return distance * 1.25;
         }
     },
+    // {
+    //     name: "Long Arm",
+    //     description: "Increase neighbor bursts distance by " + COL_POSITIVE + "25%",
+    //     rarity: RARITY_UNCOMMON,
+    //     icon_uvs: get_perk_uvs(2),
+    //     get_burst_dist: function(distance)
+    //     {
+    //         return distance * 1.25;
+    //     }
+    // },
 
     //--- RARE
     {
