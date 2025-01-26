@@ -1,6 +1,8 @@
 # Global Game Jam 2020
 ## Theme: **Bubble**
 
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/VCPsoT92-sI/0.jpg)](https://www.youtube.com/watch?v=VCPsoT92-sI)
+
 ## Install
 Executables are located into the directory `game/`
 
