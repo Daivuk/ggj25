@@ -38,7 +38,8 @@ function create_ui(style, pos, text, image_filename)
             color: Color.WHITE,
             style: style,
             children: [],
-            click_through: true
+            click_through: true,
+            float_anim: Random.randNumber(10)
         }
         case "frame": return {
             rect: new Rect(pos.x, pos.y, 100, 100),
@@ -48,7 +49,8 @@ function create_ui(style, pos, text, image_filename)
             color: Color.WHITE,
             style: style,
             children: [],
-            click_through: false
+            click_through: false,
+            float_anim: Random.randNumber(10)
         }
         case "label": return {
             rect: new Rect(pos.x, pos.y, 0, 0),
@@ -58,7 +60,8 @@ function create_ui(style, pos, text, image_filename)
             color: Color.WHITE,
             style: style,
             children: [],
-            click_through: true
+            click_through: true,
+            float_anim: Random.randNumber(10)
         }
         case "frammed_label": return {
             rect: new Rect(pos.x, pos.y, 100, 100),
@@ -68,7 +71,8 @@ function create_ui(style, pos, text, image_filename)
             color: Color.WHITE,
             style: style,
             children: [],
-            click_through: false
+            click_through: false,
+            float_anim: Random.randNumber(10)
         }
         case "button": return {
             rect: new Rect(pos.x, pos.y, 100, 100),
@@ -78,7 +82,8 @@ function create_ui(style, pos, text, image_filename)
             color: Color.WHITE,
             style: style,
             children: [],
-            click_through: false
+            click_through: false,
+            float_anim: Random.randNumber(10)
         }
         case "image": return {
             rect: new Rect(pos.x, pos.y, 64, 64),
@@ -88,7 +93,8 @@ function create_ui(style, pos, text, image_filename)
             color: Color.WHITE,
             style: style,
             children: [],
-            click_through: true
+            click_through: true,
+            float_anim: Random.randNumber(10)
         }
     }
 }
@@ -106,6 +112,7 @@ function update_ui(ui, pos, dt)
         update_ui(ui.children[i], world_pos, dt);
     }
     ui.world_rect = new Rect(world_pos.x, world_pos.y, ui.rect.w, ui.rect.h);
+    ui.float_anim += dt;
     if (!hovered_ui)
     {
         if (ui.world_rect.contains(mouse_pos))
@@ -141,6 +148,12 @@ function render_ui(ui, pos)
         world_pos.x + ui.rect.w * 0.5,
         world_pos.y + ui.rect.h * 0.5
     );
+
+    if (ui.floaty)
+    {
+        center.y += Math.sin(ui.float_anim * 0.5) * 10;
+    }
+
     if (ui.bg_image)
     {
         var rect = new Rect(pos.x + ui.rect.x, pos.y + ui.rect.y, ui.rect.w, ui.rect.h);

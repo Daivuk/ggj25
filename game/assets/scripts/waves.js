@@ -22,6 +22,20 @@ var WAVES = [
         normal_bubbles_chances: 40,
         green_bubbles_chances: 10,
         steel_bubbles_chances: 1
+    },
+    {
+        score_goal: 1500,
+        spawn_rate: 2.5,
+        normal_bubbles_chances: 40,
+        green_bubbles_chances: 20,
+        steel_bubbles_chances: 5
+    },
+    {
+        score_goal: 2500,
+        spawn_rate: 2.5,
+        normal_bubbles_chances: 40,
+        green_bubbles_chances: 30,
+        steel_bubbles_chances: 10
     }
 ]
 

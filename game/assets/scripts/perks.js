@@ -109,26 +109,11 @@ var PERKS = [
                 }
             },
             {
-                description: "Needle does " + COL_POSITIVE + "50%^999 more damage",
+                description: "Needle does " + COL_POSITIVE + "100%^999 more damage",
                 on_poke: function(damage, bubble)
                 {
                     if (bubble.is_steel) return 0;
-                    return damage * 1.5
-                }
-            },
-            {
-                description: "Needle does " + COL_POSITIVE + "50%^999 more damage",
-                on_poke: function(damage, bubble)
-                {
-                    if (bubble.is_steel) return 0;
-                    return damage * 1.5 * 1.5
-                }
-            },
-            {
-                description: "Needle can pierce steel bubbles",
-                on_poke: function(damage, bubble)
-                {
-                    return damage * 1.5 * 1.5
+                    return damage * 2
                 }
             },
             {
@@ -136,7 +121,22 @@ var PERKS = [
                 on_poke: function(damage, bubble)
                 {
                     if (bubble.is_steel) return 0;
-                    return damage * 1.5 * 1.5 * 2.0
+                    return damage * 2 * 2
+                }
+            },
+            {
+                description: "Needle can pierce steel bubbles",
+                on_poke: function(damage, bubble)
+                {
+                    return damage * 2 * 2
+                }
+            },
+            {
+                description: "Needle does " + COL_POSITIVE + "100%^999 more damage",
+                on_poke: function(damage, bubble)
+                {
+                    if (bubble.is_steel) return 0;
+                    return damage * 2 * 2 * 2
                 }
             }
         ]

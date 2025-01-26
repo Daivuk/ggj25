@@ -49,7 +49,25 @@ create_main_menu_uis();
 
 function create_main_menu_uis()
 {
-    var frm_menu = parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x * 0.5 - 200, BATH_SIZE.y * 0.5 - 150)));
+    // Title logo
+    var logo_pos = new Vector2(240, 120);
+
+    parent_ui(ui_root, create_ui("image", new Vector2(logo_pos.x + 0, logo_pos.y + 0), null, "title_b1.png")).floaty = true;
+    parent_ui(ui_root, create_ui("image", new Vector2(logo_pos.x + 90, logo_pos.y + 45), null, "title_u1.png")).floaty = true;
+    parent_ui(ui_root, create_ui("image", new Vector2(logo_pos.x + 180, logo_pos.y - 5), null, "title_b2.png")).floaty = true;
+    parent_ui(ui_root, create_ui("image", new Vector2(logo_pos.x + 280, logo_pos.y - 20), null, "title_b3.png")).floaty = true;
+    parent_ui(ui_root, create_ui("image", new Vector2(logo_pos.x + 355, logo_pos.y - 24), null, "title_l.png")).floaty = true;
+    parent_ui(ui_root, create_ui("image", new Vector2(logo_pos.x + 450, logo_pos.y + 10), null, "title_e.png")).floaty = true;
+
+    var burst_pos = logo_pos.add(new Vector2(200, 200));
+    parent_ui(ui_root, create_ui("image", new Vector2(burst_pos.x + 0, burst_pos.y + 0), null, "title_b4.png")).floaty = true;
+    parent_ui(ui_root, create_ui("image", new Vector2(burst_pos.x + 75, burst_pos.y + 25), null, "title_u2.png")).floaty = true;
+    parent_ui(ui_root, create_ui("image", new Vector2(burst_pos.x + 130, burst_pos.y + 20), null, "title_r.png")).floaty = true;
+    parent_ui(ui_root, create_ui("image", new Vector2(burst_pos.x + 170, burst_pos.y + 20), null, "title_s.png")).floaty = true;
+    parent_ui(ui_root, create_ui("image", new Vector2(burst_pos.x + 220, burst_pos.y - 5), null, "title_t.png")).floaty = true;
+
+
+    var frm_menu = parent_ui(ui_root, create_ui("frame", new Vector2(BATH_SIZE.x * 0.5 - 200, BATH_SIZE.y * 0.5 + 0)));
     frm_menu.rect.w = 400
     frm_menu.rect.h = 300
     frm_menu.color = Color.fromHexRGB(0xf6e9c7);
@@ -200,11 +218,11 @@ function update(dt)
     update_bursts(dt)
     update_flares(dt);
 
-    // Pop bubble
     if (game_state == "game")
     {
         if (wave.state == "in wave")
         {
+            // Pop bubble
             if (Input.isJustDown(Key.MOUSE_1))
             {
                 var bubble = get_bubble_at(mouse_pos);
@@ -219,6 +237,25 @@ function update(dt)
         lbl_countdown.text = "Countdown ^986" + Math.ceil(wave.countdown);
         lbl_score.text = "Score ^986" + score;
         lbl_goal.text = "Goal ^986" + wave.score_goal;
+
+        // Update passive levels
+        for (var i = 0; i < passive_slots.length; ++i)
+        {
+            var passive_slot = passive_slots[i];
+            passive_slot.children[0].text = "" + get_passive(passive_slot.perk.name).level;
+        }
+    // {
+    //     var needle_passive_ui = parent_ui(ui_root, create_ui("image", new Vector2(BATH_SIZE.x + 50, 16 + 96 * 5), null, "perks.png"));
+    //     needle_passive_ui.rect.w = 76;
+    //     needle_passive_ui.rect.h = 76;
+    //     needle_passive_ui.click_through = false;
+    //     needle_passive_ui.perk = get_passive("Needle").perk;
+    //     needle_passive_ui.image_uvs = needle_passive_ui.perk.icon_uvs;
+    //     needle_passive_ui.tooltip = render_perk_toolkit;
+
+    //     parent_ui(needle_passive_ui, create_ui("label", new Vector2(64, 64), "0")).outline = true;
+    //     passive_slots.push(needle_passive_ui);
+    // }
     }
 }
 

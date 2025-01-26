@@ -4,9 +4,6 @@
 ## Install
 Executables are located into the directory `game/`
 
-## Controls
-
-
 ## Build
 On Windows you need git, Visual Studio and CMake installed. Run `build_win32.bat`.
 On Mac you need git, a compiler, CMake and possibly other dependencies (OpenGL, SDL2, etc). Install what ever cmake barfs about. Run `build_osx.sh`
@@ -14,7 +11,8 @@ On Linux is should work just as on Mac, but hasn't been tested in a long time.
 
 ## Credits
 ### Team
-- David (Daivuk) St-Louis
+- Game by David (Daivuk) St-Louis
+- Title Design by Chloé St-Louis
 ### Resources
 - Bubble Pops by Abacagi -- https://freesound.org/s/497198/ -- License: Attribution 4.0
 - SeqGoodVibes2 by Xcreenplay -- https://freesound.org/s/725912/ -- License: Attribution NonCommercial 4.0
@@ -26,3 +24,5 @@ On Linux is should work just as on Mac, but hasn't been tested in a long time.
 - balloon movement sounds by Yuval -- https://freesound.org/s/210892/ -- License: Creative Commons 0
 - metal-multi-hits.mp3 by lesaucisson -- https://freesound.org/s/585258/ -- License: Creative Commons 0
 - Metal hit with dull ringouts by Artninja -- https://freesound.org/s/717721/ -- License: Attribution 4.0
+### Tech
+- Use OakNut engine (onut): https://github.com/Daivuk/onut
